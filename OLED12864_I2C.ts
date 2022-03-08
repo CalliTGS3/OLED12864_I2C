@@ -361,22 +361,22 @@ namespace OLED12864_I2C {
     //% blockId="OLED12864_I2C_LINE" block="draw a line at x1 %x1|y1 %y1|x2 %x2|y2 %y2|color %color"
     //% weight=73 blockGap=8
     //% parts=OLED12864_I2C trackArgs=0
-    export function line(x_0: number, y_0: number, x_1: number, y_1: number, color: number) {
-        let d_x = Math.abs(x_1 - x_0)
-        let d_y = Math.abs(y_1 - y_0)
-        let x = x_0
-        let y = y_0
+    export function line(x_1: number, y_1: number, x_2: number, y_2: number, color: number) {
+        let d_x = Math.abs(x_2 - x_1)
+        let d_y = Math.abs(y_2 - y_1)
+        let x = x_1
+        let y = y_1
         let s_x = 0
         let s_y = 0
         let err = 0
-        if (x_0 > x_1) { 
+        if (x_1 > x_2) { 
             s_x = -1 
         }    
         else
         {   
             s_x = 1
         }     
-        if (y_0 > y_1) { 
+        if (y_1 > y_2) { 
             s_y = -1 
         }    
         else
@@ -385,7 +385,7 @@ namespace OLED12864_I2C {
         }     
         if (d_x > d_y) {
             err = d_x / 2.0
-            while (x != x_1) {
+            while (x != x_2) {
                 pixel(x, y, color)
                 err -= d_y
                 if (err < 0) {
@@ -398,7 +398,7 @@ namespace OLED12864_I2C {
         else
         {
             err = d_y / 2.0
-            while (y != y_1) {
+            while (y != y_2) {
                 pixel(x, y, color)
                 err -= d_x
                 if (err < 0) {
