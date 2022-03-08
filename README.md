@@ -100,6 +100,18 @@ draw a rectangle.
   - (x2, y2), end point
   - color, draw color, it can be 1 or 0.
 
+- **circle(center_x: number, center_y:number, radius:number, color: number = 1)**  
+draw a circle.
+  - (centerx, centery), center point
+  - radius, radius
+  - color, draw color, it can be 1 or 0.
+
+- **line(x1: number, y1: number, x2: number, y2: number, color: number = 1)**  
+draw a line.
+  - (x1, y1), start point
+  - (x2, y2), end point
+  - color, draw color, it can be 1 or 0.
+
 ## Demo
 
 ![](demo.png)  
@@ -115,6 +127,7 @@ Copyright (c) 2018, microbit/micropython Chinese community
 ## Supported targets
 
 * for PXT/microbit
+* for PXT/calliope
 
 
 [From microbit/micropython Chinese community](http://www.micropython.org.cn)
