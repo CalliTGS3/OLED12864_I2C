@@ -2,6 +2,9 @@
 * makecode I2C OLED 128x64 Package.
 * From microbit/micropython Chinese community.
 * http://www.micropython.org.cn
+*
+* Additional functions draw_circle and draw_line 
+*
 */
 
 //% weight=20 color=#0855AA icon="O" block="OLED12864_I2C"
@@ -307,6 +310,105 @@ namespace OLED12864_I2C {
         hline(x1, y2, x2 - x1 + 1, color)
         vline(x1, y1, y2 - y1 + 1, color)
         vline(x2, y1, y2 - y1 + 1, color)
+    }
+
+    /**
+     * draw a circle
+     * @param center_x is Center X alis, eg: 32
+     * @param center_y is Center Y, eg: 32
+     * @param radius is Radius, eg: 32
+     * @param color is line color, eg: 1
+     */
+    //% blockId="OLED12864_I2C_CIRCLE" block="draw a circle at center_x %center_x|center_y %center_y|radius %radius|color %color"
+    //% weight=73 blockGap=8
+    //% parts=OLED12864_I2C trackArgs=0
+    export function circle(center_x: number, center_y:number, radius:number, color: number = 1) {
+        let x = radius - 1
+        let y = 0
+        let d_x = 1
+        let d_y = 1
+        let err = d_x - (radius << 1)
+        while (x >= y) {
+            pixel(center_x + x, center_y + y, color)
+            pixel(center_x + y, center_y + x, color)
+            pixel(center_x - y, center_y + x, color)
+            pixel(center_x - x, center_y + y, color)
+            pixel(center_x - x, center_y - y, color)
+            pixel(center_x - y, center_y - x, color)
+            pixel(center_x + y, center_y - x, color)
+            pixel(center_x + x, center_y - y, color)
+            if (err <= 0) {
+                y += 1
+                err += d_y
+                d_y += 2
+            }    
+            if (err > 0) {
+                x -= 1
+                d_x += 2
+                err += d_x - (radius << 1)
+            }
+        }    
+    }
+
+    /**
+     * draw a line
+     * @param x1 is X alis, eg: 0
+     * @param y1 is Y alis, eg: 0
+     * @param x2 is X alis, eg: 60
+     * @param y2 is Y alis, eg: 30
+     * @param color is line color, eg: 1
+     */
+    //% blockId="OLED12864_I2C_LINE" block="draw a line at x1 %x1|y1 %y1|x2 %x2|y2 %y2|color %color"
+    //% weight=73 blockGap=8
+    //% parts=OLED12864_I2C trackArgs=0
+    export function line(x_0: number, y_0: number, x_1: number, y_1: number, color: number) {
+        let d_x = Math.abs(x_1 - x_0)
+        let d_y = Math.abs(y_1 - y_0)
+        let x = x_0
+        let y = y_0
+        let s_x = 0
+        let s_y = 0
+        let err = 0
+        if (x_0 > x_1) { 
+            s_x = -1 
+        }    
+        else
+        {   
+            s_x = 1
+        }     
+        if (y_0 > y_1) { 
+            s_y = -1 
+        }    
+        else
+        {   
+            s_y = 1
+        }     
+        if (d_x > d_y) {
+            err = d_x / 2.0
+            while (x != x_1) {
+                pixel(x, y, color)
+                err -= d_y
+                if (err < 0) {
+                    y += s_y
+                    err += d_x
+                }    
+                x += s_x
+            }
+        }    
+        else
+        {
+            err = d_y / 2.0
+            while (y != y_1) {
+                pixel(x, y, color)
+                err -= d_x
+                if (err < 0) {
+                    x += s_x
+                    err += d_y
+                }
+                y += s_y
+            }
+            pixel(x, y, color)
+        }
     }
 
     /**
