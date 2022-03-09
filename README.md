@@ -102,8 +102,8 @@ draw a rectangle.
 
 - **circle(center_x: number, center_y:number, radius:number, color: number = 1)**  
 draw a circle.
-  - (centerx, centery), center point
-  - radius, radius
+  - (center_x, center_y), circle center point
+  - radius, circle radius
   - color, draw color, it can be 1 or 0.
 
 - **line(x1: number, y1: number, x2: number, y2: number, color: number = 1)**  
