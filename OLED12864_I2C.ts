@@ -223,7 +223,7 @@ namespace OLED12864_I2C {
     //% weight=80 blockGap=8
     //% parts=OLED12864_I2C trackArgs=0
     export function showString(x: number, y: number, s: string, color: number = 1) {
-        if ((x < (128 >> _ZOOM)) && (y < (64 >> _ZOOM))) {  
+        if ((x < (24 >> _ZOOM)) && (y < (8 >> _ZOOM)) && (y*(24 >> _ZOOM) + x + s.length()) < (200 >> (_ZOOM*2))) {
             let col = 0
             let p = 0
             let ind = 0
@@ -272,7 +272,7 @@ namespace OLED12864_I2C {
      * @param len is the length of line, eg: 10
      * @param color is line color, eg: 1
      */
-    //% blockId="OLED12864_I2C_HLINE" block="draw a horizontal line at x %x|y %y|number %len|color %color"
+    //% blockId="OLED12864_I2C_HLINE" block="draw a horizontal line at x %x|y %y|len %len|color %color"
     //% weight=71 blockGap=8
     //% parts=OLED12864_I2C trackArgs=0
     export function hline(x: number, y: number, len: number, color: number = 1) {
@@ -287,7 +287,7 @@ namespace OLED12864_I2C {
      * @param len is the length of line, eg: 10
      * @param color is line color, eg: 1
      */
-    //% blockId="OLED12864_I2C_VLINE" block="draw a vertical line at x %x|y %y|number %len|color %color"
+    //% blockId="OLED12864_I2C_VLINE" block="draw a vertical line at x %x|y %y|len %len|color %color"
     //% weight=72 blockGap=8
     //% parts=OLED12864_I2C trackArgs=0
     export function vline(x: number, y: number, len: number, color: number = 1) {
@@ -353,6 +353,23 @@ namespace OLED12864_I2C {
                 err += d_x - (radius << 1)
             }
         }    
+    }
+
+    /**
+     * draw a radius in a circle
+     * @param center_x is Center X alis, eg: 32
+     * @param center_y is Center Y, eg: 32
+     * @param radius is Radius, eg: 32
+     * @param angle is Angle in degrees, eg: 10 
+     * @param color is line color, eg: 1
+     */
+    //% blockId="OLED12864_I2C_RADIUS" block="draw a radius at center_x %center_x|center_y %center_y|radius %radius|angle %angle|color %color"
+    //% weight=73 blockGap=8
+    //% parts=OLED12864_I2C trackArgs=0
+    export function radius(center_x: number, center_y:number, radius:number, angle: number, color: number = 1) {
+        let circle_x = Math.ceil(center_x + radius * Math.cos((360 - angle) * Math.PI / 180))
+        let circle_y = Math.ceil(center_y + radius * Math.sin((360 - angle) * Math.PI / 180))
+        line(center_x, center_y, circle_x, circle_y, color) 
     }
 
     /**
