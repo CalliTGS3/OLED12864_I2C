@@ -190,7 +190,7 @@ namespace OLED12864_I2C {
     //% weight=70 blockGap=8
     //% parts=OLED12864_I2C trackArgs=0
     export function pixel(x: number, y: number, color: number = 1) {
-        if ((x < (128 >> _ZOOM)) && (y < (64 >> _ZOOM))) {  
+        if ((x >= 0) && (y >= 0) && (x < (128 >> _ZOOM)) && (y < (64 >> _ZOOM))) {  
             let page = y >> 3
             let shift_page = y % 8
             let ind = x * (_ZOOM + 1) + page * 128 + 1
@@ -223,7 +223,7 @@ namespace OLED12864_I2C {
     //% weight=80 blockGap=8
     //% parts=OLED12864_I2C trackArgs=0
     export function showString(x: number, y: number, s: string, color: number = 1) {
-        if ((x < (24 >> _ZOOM)) && (y < (8 >> _ZOOM)) && (y*(24 >> _ZOOM) + x + s.length()) < (200 >> (_ZOOM*2))) {
+        if ((x >= 0) && (y >= 0) && (x < (24 >> _ZOOM)) && (y < (8 >> _ZOOM)) && (y * (24 >> _ZOOM) + x + s.length()) < (200 >> (_ZOOM*2))) {
             let col = 0
             let p = 0
             let ind = 0
@@ -319,8 +319,8 @@ namespace OLED12864_I2C {
 
     /**
      * draw a circle
-     * @param center_x is Center X alis, eg: 32
-     * @param center_y is Center Y, eg: 32
+     * @param center_x is Center X axis, eg: 32
+     * @param center_y is Center Y axis, eg: 32
      * @param radius is Radius, eg: 32
      * @param color is line color, eg: 1
      */
@@ -356,20 +356,38 @@ namespace OLED12864_I2C {
     }
 
     /**
-     * draw a radius in a circle
-     * @param center_x is Center X alis, eg: 32
-     * @param center_y is Center Y, eg: 32
-     * @param radius is Radius, eg: 32
+     * draw a radius line in a circle
+     * @param center_x is Center X axis, eg: 32
+     * @param center_y is Center Y axis, eg: 32
+     * @param radius is Radius len, eg: 32
      * @param angle is Angle in degrees, eg: 10 
      * @param color is line color, eg: 1
      */
-    //% blockId="OLED12864_I2C_RADIUS" block="draw a radius at center_x %center_x|center_y %center_y|radius %radius|angle %angle|color %color"
+    //% blockId="OLED12864_I2C_RADIUS_LINE" block="draw a radius line at center_x %center_x|center_y %center_y|radius %radius|angle %angle|color %color"
     //% weight=73 blockGap=8
     //% parts=OLED12864_I2C trackArgs=0
-    export function radius(center_x: number, center_y:number, radius:number, angle: number, color: number = 1) {
+    export function radius_line(center_x: number, center_y:number, radius:number, angle: number, color: number = 1) {
         let circle_x = Math.ceil(center_x + radius * Math.cos((360 - angle) * Math.PI / 180))
         let circle_y = Math.ceil(center_y + radius * Math.sin((360 - angle) * Math.PI / 180))
-        line(center_x, center_y, circle_x, circle_y, color) 
+        OLED12864_I2C.line(center_x, center_y, circle_x, circle_y, color) 
+    }
+
+    /**
+     * draw a circle at a radius
+     * @param center_x is Center X axis, eg: 32
+     * @param center_y is Center Y axis, eg: 32
+     * @param radius is Radius, eg: 32
+     * @param angle is Angle in degrees, eg: 10 
+     * @param circle is Radius of circle at Radius point, eg: 2
+     * @param color is line color, eg: 1
+     */
+    //% blockId="OLED12864_I2C_RADIUS_CIRCLE" block="draw a circle at center_x %center_x|center_y %center_y|radius %radius|angle %angle|circle %circle|color %color"
+    //% weight=73 blockGap=8
+    //% parts=OLED12864_I2C trackArgs=0
+    export function radius_circle(center_x: number, center_y:number, radius:number, angle: number, circle: number, color: number = 1) {
+        let circle_x = Math.ceil(center_x + radius * Math.cos((360 - angle) * Math.PI / 180))
+        let circle_y = Math.ceil(center_y + radius * Math.sin((360 - angle) * Math.PI / 180))
+        OLED12864_I2C.circle(circle_x, circle_y, circle, color)
     }
 
     /**
