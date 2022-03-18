@@ -106,11 +106,19 @@ draw a circle.
   - radius, circle radius
   - color, draw color, it can be 1 or 0.
 
-- **radius(center_x: number, center_y:number, radius:number, angle: number, color: number = 1)**  
-draw a radius in a circle.
+- **radius_line(center_x: number, center_y:number, radius:number, angle: number, color: number = 1)**  
+draw a radius line in a circle at angle.
   - (center_x, center_y), circle center point
   - radius, circle radius
   - angle, angle in degrees, starting east
+  - color, draw color, it can be 1 or 0.
+  
+- **radius_circle(center_x: number, center_y:number, radius:number, angle: number, circle: number, color: number = 1)**  
+draw a circle at radius, angle in a circle.
+  - (center_x, center_y), circle center point
+  - radius, circle radius
+  - angle, angle in degrees, starting east
+  - circle, radius of circle at radius point
   - color, draw color, it can be 1 or 0.
 
 - **line(x1: number, y1: number, x2: number, y2: number, color: number = 1)**  
