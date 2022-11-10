@@ -223,7 +223,7 @@ namespace OLED12864_I2C {
     //% weight=80 blockGap=8
     //% parts=OLED12864_I2C trackArgs=0
     export function showString(x: number, y: number, s: string, color: number = 1) {
-        if ((x >= 0) && (y >= 0) && (x < (24 >> _ZOOM)) && (y < (8 >> _ZOOM)) && (y * (24 >> _ZOOM) + x + s.length()) < (200 >> (_ZOOM*2))) {
+        if ((x >= 0) && (y >= 0) && (x < (24 >> _ZOOM)) && (y < (8 >> _ZOOM)) && (y * (24 >> _ZOOM) + x + s.length) < (200 >> (_ZOOM*2))) {
             let col = 0
             let p = 0
             let ind = 0
