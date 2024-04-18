@@ -4,6 +4,7 @@
 * http://www.micropython.org.cn
 *
 * Additional functions draw_circle and draw_line 
+* Additional scroll functions
 *
 */
 
@@ -145,6 +146,7 @@ namespace OLED12864_I2C {
     let _buf3 = pins.createBuffer(3);
     let _buf4 = pins.createBuffer(4);
     let _ZOOM = 1;
+    let scroll_speed: number[] = [3, 2, 1, 0, 6, 5, 4, 7];    
 
     function cmd1(d: number) {
         let n = d % 256;
@@ -180,6 +182,39 @@ namespace OLED12864_I2C {
         return d
     }
 
+    /**
+     * scroll OLED display left pixel-wise
+     * @param speed is scroll speed, eg: 0
+     */
+    //% blockId="OLED12864_I2C_SCROLL_LEFT" block="setup scroll left with speed %speed"
+    //% speed.min=0 speed.max=7 speed.defl=4
+    //% weight=70 blockGap=8
+    //% parts=OLED12864_I2C trackArgs=0
+    export function setupScrollLeft(speed: number) {
+        cmd1(0x27);  //Horizontal Scroll Setup
+        cmd1(0x00);  // dummy byte
+        cmd1(0x00);  // start page address
+        cmd1(scroll_speed[speed]); // set time interval between each scroll
+        cmd1(0x07);  // end page address
+        cmd1(0x01);
+        cmd1(0xFF);
+    }
+
+    /**
+     * scroll ON / OFF
+     * @param onoff, eg: true / false
+     */
+    //% blockId="OLED12864_I2C_SCROLL_SWITCH" block="scroll switch %onoff"
+    //% weight=70 blockGap=8
+    //% parts=OLED12864_I2C trackArgs=0
+    export function setupScrollSwitch(onoff: boolean) {
+        if(onoff) {
+            cmd1(0x2f);  // active scrolling
+        } else {
+            cmd1(0x2e);  // inactive scrolling
+        }
+    }
+    
     /**
      * set pixel in OLED
      * @param x is X alis, eg: 0
@@ -546,6 +581,7 @@ namespace OLED12864_I2C {
         cmd1(0xA6)       // SSD1306_NORMALDISPLAY
         cmd2(0xD6, 1)    // zoom on
         cmd1(0xAF)       // SSD1306_DISPLAYON
+        cmd1(0x2E);      // inactive SCROLLING
         clear()
         _ZOOM = 1
     }
