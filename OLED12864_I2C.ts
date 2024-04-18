@@ -146,7 +146,10 @@ namespace OLED12864_I2C {
     let _buf3 = pins.createBuffer(3);
     let _buf4 = pins.createBuffer(4);
     let _ZOOM = 1;
-    let scroll_speed: number[] = [3, 2, 1, 0, 6, 5, 4, 7];    
+    let _scroll_speed = 0;
+    let _select_speed: number[] = [3, 2, 1, 0, 6, 5, 4, 7];
+    let _sampling_period: number[] = [1150, 580, 280, 50, 40, 30, 24, 14];
+    let _time_scale: number[] = [148, 74, 37, 7, 5.75, 4.6, 3.5, 2.3];
 
     function cmd1(d: number) {
         let n = d % 256;
@@ -191,13 +194,34 @@ namespace OLED12864_I2C {
     //% weight=70 blockGap=8
     //% parts=OLED12864_I2C trackArgs=0
     export function setupScrollLeft(speed: number) {
+        _scroll_speed = speed;
         cmd1(0x27);  //Horizontal Scroll Setup
         cmd1(0x00);  // dummy byte
         cmd1(0x00);  // start page address
-        cmd1(scroll_speed[speed]); // set time interval between each scroll
+        cmd1(_select_speed[_scroll_speed]); // set time interval between each scroll
         cmd1(0x07);  // end page address
         cmd1(0x01);
         cmd1(0xFF);
+    }
+
+    /**
+     * get sampling period, based on scroll speed
+     */
+    //% blockId="OLED12864_I2C_GET_SAMPLING_PERIOD" block="get sampling period"
+    //% weight=70 blockGap=8
+    //% parts=OLED12864_I2C trackArgs=0
+    export function getSamplingPeriod():number {
+        return _sampling_period[_scroll_speed];
+    }
+
+    /**
+     * get time scale, based on scroll speed
+     */
+    //% blockId="OLED12864_I2C_GET_TIME_SCALE" block="get time scale"
+    //% weight=70 blockGap=8
+    //% parts=OLED12864_I2C trackArgs=0
+    export function getTimeScale():number {
+        return _time_scale[_scroll_speed];
     }
 
     /**
