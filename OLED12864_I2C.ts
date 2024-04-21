@@ -197,10 +197,7 @@ namespace OLED12864_I2C {
         for (let page = 0; page < 8; page++) {
             set_pos(col, page);
             let ind = col * (_ZOOM + 1) + page * 128 + 1
-            for (let shift_page = 0; shift_page < 8; shift_page++) {
-                let b = clrbit(_screen[ind], shift_page)
-                _screen[ind] = b
-            }    
+            _screen[ind] = 0    
             if (_ZOOM) {
                 _buf3[0] = 0x40
                 _buf3[1] = _buf3[2] = 0
