@@ -186,6 +186,35 @@ namespace OLED12864_I2C {
     }
 
     /**
+     * Clear Column
+     * @param col, eg: 0
+     */
+    //% blockId="OLED12864_I2C_CLEAR_COLUMN" block="clear column %col"
+    //% speed.min=0 speed.max=7 speed.defl=4
+    //% weight=70 blockGap=8
+    //% parts=OLED12864_I2C trackArgs=0
+    export function clearColumn(col: number) {
+        for (let page = 0; page < 8; page++) {
+            set_pos(col, page);
+            let ind = col * (_ZOOM + 1) + page * 128 + 1
+            for (let shift_page = 0; shift_page < 8; shift_page++) {
+                let b = clrbit(_screen[ind], shift_page)
+                _screen[ind] = b
+            }    
+            if (_ZOOM) {
+                _buf3[0] = 0x40
+                _buf3[1] = _buf3[2] = 0
+                pins.i2cWriteBuffer(_I2CAddr, _buf3)
+            }
+            else {
+                _buf2[0] = 0x40
+                _buf2[1] = 0
+                pins.i2cWriteBuffer(_I2CAddr, _buf2)
+            }
+        }
+    }
+
+    /**
      * scroll OLED display left pixel-wise
      * @param speed is scroll speed, eg: 0
      */
