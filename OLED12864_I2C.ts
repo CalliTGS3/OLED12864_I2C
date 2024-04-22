@@ -221,7 +221,7 @@ namespace OLED12864_I2C {
     //% parts=OLED12864_I2C trackArgs=0
     export function setupScrollLeft(speed: number) {
         _scroll_speed = speed;
-        cmd1(0x27);  //Horizontal Scroll Setup
+        cmd1(0x27);  // Horizontal Scroll Setup
         cmd1(0x00);  // dummy byte
         cmd1(0x00);  // start page address
         cmd1(_select_speed[_scroll_speed]); // set time interval between each scroll
@@ -259,9 +259,9 @@ namespace OLED12864_I2C {
     //% parts=OLED12864_I2C trackArgs=0
     export function setupScrollSwitch(onoff: boolean) {
         if(onoff) {
-            cmd1(0x2f);  // active scrolling
+            cmd1(0x2F);  // active scrolling
         } else {
-            cmd1(0x2e);  // inactive scrolling
+            cmd1(0x2E);  // inactive scrolling
         }
     }
     
@@ -555,6 +555,20 @@ namespace OLED12864_I2C {
     //% weight=64 blockGap=8
     //% parts=OLED12864_I2C trackArgs=0
     export function draw() {
+        set_pos()
+        pins.i2cWriteBuffer(_I2CAddr, _screen)
+    }
+
+    /**
+     * scroll / redraw screen
+     */
+    //% blockId="OLED12864_I2C_SOFTSCROLL" block="softscroll"
+    //% weight=64 blockGap=8
+    //% parts=OLED12864_I2C trackArgs=0
+    export function softscroll() {
+        for (let page = 0; page < 8; page++) {
+            _screen.shift(1, page * 128 + 1, 128)
+        }
         set_pos()
         pins.i2cWriteBuffer(_I2CAddr, _screen)
     }
