@@ -140,6 +140,20 @@ namespace OLED12864_I2C {
     font[126] = 0x00841080;
     font[127] = 0x0022d422;
 
+    export enum scrollDirection {
+            //% block="left"
+            left,
+            //% block="right"
+            right
+        }
+
+    export enum scrollType {
+            //% block="shift"
+            shift,
+            //% block="rotate"
+            rotate
+        }
+    
     let _I2CAddr = 0;
     let _screen = pins.createBuffer(1025);
     let _buf2 = pins.createBuffer(2);
@@ -560,14 +574,30 @@ namespace OLED12864_I2C {
     }
 
     /**
-     * scroll / redraw screen
+     * scroll and redraw screen
+     * @param startpage: 0..7, eg: 0
+     * @param endpage: 0..7, eg: 7
+     * @param scrollshift: 1..10, eg: 1
+     * @param scrolltype: shift / rotate, eg: shift (fill with 0)
+     * @param scrolldirection: left / right, eg: left
+     * 
      */
-    //% blockId="OLED12864_I2C_SOFTSCROLL" block="softscroll"
+    //% blockId="OLED12864_I2C_SOFTSCROLL" block="softscroll with scrolldirection %scrolldirection||scrolltype %scrolltype|scrollshift %scrollshift|startpage %startpage|endpage %endpage"
+    //% startpage.min=0 startpage.max=7 startpage.defl=0
+    //% endpage.min=0 endpage.max=7 endpage.defl=7
+    //% scrollshift.min=1 scrollshift.max=10 scrollshift.defl=1
     //% weight=64 blockGap=8
     //% parts=OLED12864_I2C trackArgs=0
-    export function softscroll() {
-        for (let page = 0; page < 8; page++) {
-            _screen.shift(1, page * 128 + 1, 128)
+    export function softscroll(scrolldirection = scrollDirection.left, scrolltype = scrollType.shift, scrollshift = 1, startpage = 0, endpage = 7) {
+        if (scrolldirection == scrollDirection.right) {
+            scrollshift = scrollshift * -1
+        }
+        for (let page = startpage; page < (endpage + 1); page++) {
+            if (scrolltype == scrollType.shift) {
+                _screen.shift(scrollshift, page * 128 + 1, 128)
+            } else {
+                _screen.rotate(scrollshift, page * 128 + 1, 128)
+            }
         }
         set_pos()
         pins.i2cWriteBuffer(_I2CAddr, _screen)
