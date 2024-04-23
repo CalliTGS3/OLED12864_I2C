@@ -589,14 +589,15 @@ namespace OLED12864_I2C {
     //% weight=64 blockGap=8
     //% parts=OLED12864_I2C trackArgs=0
     export function softscroll(scrolldirection = scrollDirection.left, scrolltype = scrollType.shift, scrollshift = 1, startpage = 0, endpage = 7) {
+        let zoomed_shift = scrollshift + _ZOOM 
         if (scrolldirection == scrollDirection.right) {
-            scrollshift = scrollshift * -1
+            zoomed_shift = zoomed_shift * -1
         }
         for (let page = startpage; page < (endpage + 1); page++) {
             if (scrolltype == scrollType.shift) {
-                _screen.shift(scrollshift, page * 128 + 1, 128)
+                _screen.shift(zoomed_shift, page * 128 + 1, 128)
             } else {
-                _screen.rotate(scrollshift, page * 128 + 1, 128)
+                _screen.rotate(zoomed_shift, page * 128 + 1, 128)
             }
         }
         set_pos()
